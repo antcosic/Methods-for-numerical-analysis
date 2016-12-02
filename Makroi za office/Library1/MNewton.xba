@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="MNewton" script:language="StarBasic">rem newton1
+rem ------------------------------------------------------------------
+Sub newton1
+
+Dim Doc As Object
+Dim Sheet As Object
+Dim preciznost, xi, xn, n As Object
+Dim funkcija, vrijednost_funkcije, derivacija, vrijednost_prve_derivacije, B1 As Object   
+Dim i
+Dim iteracije
+Dim oRange As Object
+Dim oFlags As Long
+
+Doc = ThisComponent
+Sheet = Doc.Sheets(5)
+
+oRange = Sheet.getCellRangeByName(&quot;A5:D31000&quot;)
+
+oFlags = com.sun.star.sheet.CellFlags.VALUE + _
+    com.sun.star.sheet.CellFlags.DATETIME + _
+    com.sun.star.sheet.CellFlags.STRING + _
+    com.sun.star.sheet.CellFlags.ANNOTATION + _
+    com.sun.star.sheet.CellFlags.FORMULA + _
+    com.sun.star.sheet.CellFlags.HARDATTR + _
+    com.sun.star.sheet.CellFlags.STYLES + _
+    com.sun.star.sheet.CellFlags.OBJECTS + _
+    com.sun.star.sheet.CellFlags.EDITATTR
+    
+oRange.clearContents(oFlags)
+
+B1 = Sheet.getCellByPosition(1, 0)
+preciznost = Sheet.getCellByPosition(6, 0)
+n = Sheet.getCellByPosition(0, 4)
+n.value = 0
+xn = Sheet.getCellByPosition(1, 4)
+xn.value=B1.getValue()
+vrijednost_funkcije = Sheet.getCellByPosition(3, 0)
+funkcija = Sheet.getCellByPosition(2, 4)
+funkcija.value=vrijednost_funkcije.getValue()
+vrijednost_prve_derivacije = Sheet.getCellByPosition(3, 1)
+derivacija = Sheet.getCellByPosition(3, 4)
+derivacija.value=vrijednost_prve_derivacije.getValue()
+
+i = 5
+iteracije=0
+Do While Abs(funkcija.value) &gt; preciznost.getValue()
+	xi = Sheet.getCellByPosition(1, i)
+	xn = Sheet.getCellByPosition(1, i-1)
+	funkcija = Sheet.getCellByPosition(2, i-1)
+	derivacija = Sheet.getCellByPosition(3, i-1)
+	B1.value=xn.getValue()
+	funkcija.value= vrijednost_funkcije.getValue()
+	derivacija.value= vrijednost_prve_derivacije.getValue()
+	if Abs(funkcija.value) &gt; preciznost.getValue() then
+		xi.value = xn.getValue() - (vrijednost_funkcije.getValue()/vrijednost_prve_derivacije.getValue())
+		n = Sheet.getCellByPosition(0, i)
+		n.value = iteracije + 1
+	end if 
+	iteracije = iteracije + 1
+	i=i+1
+Loop
+
+End Sub
+
+
+rem Mnewton
+rem ------------------------------------------------------------------
+Sub Mnewton
+
+Dim Doc As Object
+Dim Sheet As Object
+Dim preciznost, xi, xn, n As Object
+Dim funkcija, vrijednost_funkcije, derivacija, vrijednost_prve_derivacije, B1 As Object   
+Dim i
+Dim iteracije
+Dim oRange As Object
+Dim oFlags As Long
+
+Doc = ThisComponent
+Sheet = Doc.Sheets(5)
+
+oRange = Sheet.getCellRangeByName(&quot;A5:D31000&quot;)
+
+oFlags = com.sun.star.sheet.CellFlags.VALUE + _
+    com.sun.star.sheet.CellFlags.DATETIME + _
+    com.sun.star.sheet.CellFlags.STRING + _
+    com.sun.star.sheet.CellFlags.ANNOTATION + _
+    com.sun.star.sheet.CellFlags.FORMULA + _
+    com.sun.star.sheet.CellFlags.HARDATTR + _
+    com.sun.star.sheet.CellFlags.STYLES + _
+    com.sun.star.sheet.CellFlags.OBJECTS + _
+    com.sun.star.sheet.CellFlags.EDITATTR
+    
+oRange.clearContents(oFlags)
+
+B1 = Sheet.getCellByPosition(1, 0)
+preciznost = Sheet.getCellByPosition(6, 0)
+n = Sheet.getCellByPosition(0, 4)
+n.value = 0
+xn = Sheet.getCellByPosition(1, 4)
+xn.value=B1.getValue()
+vrijednost_funkcije = Sheet.getCellByPosition(3, 0)
+funkcija = Sheet.getCellByPosition(2, 4)
+funkcija.value=vrijednost_funkcije.getValue()
+vrijednost_prve_derivacije = Sheet.getCellByPosition(3, 1)
+derivacija = Sheet.getCellByPosition(3, 4)
+derivacija.value=vrijednost_prve_derivacije.getValue()
+
+i = 5
+iteracije=0
+Do While Abs(funkcija.value) &gt; preciznost.getValue()
+	xi = Sheet.getCellByPosition(1, i)
+	xn = Sheet.getCellByPosition(1, i-1)
+	funkcija = Sheet.getCellByPosition(2, i-1)
+	derivacija = Sheet.getCellByPosition(3, i-1)
+	B1.value=xn.getValue()
+	funkcija.value= vrijednost_funkcije.getValue()
+	derivacija.value= vrijednost_prve_derivacije.getValue()
+	if Abs(funkcija.value) &gt; preciznost.getValue() then
+		xi.value = xn.getValue() - 2*((vrijednost_funkcije.getValue()/vrijednost_prve_derivacije.getValue()))
+		n = Sheet.getCellByPosition(0, i)
+		n.value = iteracije + 1
+	end if 
+	iteracije = iteracije + 1
+	i=i+1
+Loop
+
+End Sub
+
+
+</script:module>

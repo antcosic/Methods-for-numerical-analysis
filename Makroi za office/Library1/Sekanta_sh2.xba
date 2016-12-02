@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Sekanta_sh2" script:language="StarBasic">rem sekanta1
+rem ------------------------------------------------------------------
+Sub sekanta1
+
+Dim Doc As Object
+Dim Sheet As Object
+Dim preciznost, n, f, fn As Object
+Dim xn, x, nultocka As Object   
+Dim i, j
+Dim iteracije
+Dim fx
+Dim x1, x2 As Object
+Dim iks1, iks2, fx1, fx2
+Dim oRange As Object
+Dim oFlags As Long
+
+Doc = ThisComponent
+Sheet = Doc.Sheets(2)
+
+oRange = Sheet.getCellRangeByName(&quot;T5:V31000&quot;)
+
+oFlags = com.sun.star.sheet.CellFlags.VALUE + _
+    com.sun.star.sheet.CellFlags.DATETIME + _
+    com.sun.star.sheet.CellFlags.STRING + _
+    com.sun.star.sheet.CellFlags.ANNOTATION + _
+    com.sun.star.sheet.CellFlags.FORMULA + _
+    com.sun.star.sheet.CellFlags.HARDATTR + _
+    com.sun.star.sheet.CellFlags.STYLES + _
+    com.sun.star.sheet.CellFlags.OBJECTS + _
+    com.sun.star.sheet.CellFlags.EDITATTR
+    
+oRange.clearContents(oFlags)
+
+preciznost = Sheet.getCellByPosition(24, 0)
+x = Sheet.getCellByPosition(20, 0)
+nultocka = Sheet.getCellByPosition(22, 1)
+f = Sheet.getCellByPosition(22, 0)
+	
+for j = 4 to 5
+	n= Sheet.getCellByPosition(19, j)
+	n.value = j-3
+	xn = Sheet.getCellByPosition(20, j)
+	x = Sheet.getCellByPosition(20, j-4)
+	xn.value=x.getValue()
+	nultocka.value = xn.getValue()
+	fn = Sheet.getCellByPosition(21, j)
+	fn.value=f.getValue()
+	if Abs(fn.value) &lt; preciznost.getValue() then exit sub
+next j
+
+
+i = 6
+Do While Abs(fn.value) &gt; preciznost.getValue()
+	x1 = Sheet.getCellByPosition(20, i-2)
+	iks1 = x1.getValue()
+	nultocka.value=iks1
+	fx1=f.getValue()
+	x2 = Sheet.getCellByPosition(20, i-1)
+	iks2 = x2.getValue()
+	nultocka.value=iks2
+	fx2=f.getValue()
+	
+	n = Sheet.getCellByPosition(19, i)
+	n.value = i-3
+	
+	xn = Sheet.getCellByPosition(20, i)
+	xn.value=iks2-(((iks2-iks1)/(fx2-fx1))*fx2)
+	nultocka.value = xn.getValue()
+	fn = Sheet.getCellByPosition(21, i)
+	fn.value=f.getValue()
+	i=i+1
+Loop
+
+End Sub
+
+rem sekanta2
+rem ------------------------------------------------------------------
+Sub sekanta2
+
+Dim Doc As Object
+Dim Sheet As Object
+Dim broj_iteracija, n, f, fn As Object
+Dim xn, x, nultocka As Object   
+Dim i, j
+Dim iteracije
+Dim fx
+Dim x1, x2 As Object
+Dim iks1, iks2, fx1, fx2
+Dim oRange As Object
+Dim oFlags As Long
+
+Doc = ThisComponent
+Sheet = Doc.Sheets(2)
+
+oRange = Sheet.getCellRangeByName(&quot;T5:V31000&quot;)
+
+oFlags = com.sun.star.sheet.CellFlags.VALUE + _
+    com.sun.star.sheet.CellFlags.DATETIME + _
+    com.sun.star.sheet.CellFlags.STRING + _
+    com.sun.star.sheet.CellFlags.ANNOTATION + _
+    com.sun.star.sheet.CellFlags.FORMULA + _
+    com.sun.star.sheet.CellFlags.HARDATTR + _
+    com.sun.star.sheet.CellFlags.STYLES + _
+    com.sun.star.sheet.CellFlags.OBJECTS + _
+    com.sun.star.sheet.CellFlags.EDITATTR
+    
+oRange.clearContents(oFlags)
+
+broj_iteracija = Sheet.getCellByPosition(24, 1)
+x = Sheet.getCellByPosition(20, 0)
+nultocka = Sheet.getCellByPosition(22, 1)
+f = Sheet.getCellByPosition(22, 0)
+	
+for j = 4 to 5
+	n= Sheet.getCellByPosition(19, j)
+	n.value = j-3
+	xn = Sheet.getCellByPosition(20, j)
+	x = Sheet.getCellByPosition(20, j-4)
+	xn.value=x.getValue()
+	nultocka.value = xn.getValue()
+	fn = Sheet.getCellByPosition(21, j)
+	fn.value=f.getValue()
+next j
+
+
+for i = 6 to broj_iteracija.getValue() + 6
+	x1 = Sheet.getCellByPosition(20, i-2)
+	iks1 = x1.getValue()
+	nultocka.value=iks1
+	fx1=f.getValue()
+	x2 = Sheet.getCellByPosition(20, i-1)
+	iks2 = x2.getValue()
+	nultocka.value=iks2
+	fx2=f.getValue()
+	if ((fx2 - fx1) = 0) then 
+		msgbox(&quot;Iteriranje prekinuto! Razlika vrijednosti funkcije u prethodne dvije točke jednaka je 0.&quot;)
+		exit sub
+	end if
+	n = Sheet.getCellByPosition(19, i)
+	n.value = i-3
+	
+	xn = Sheet.getCellByPosition(20, i)
+	xn.value=iks2-(((iks2-iks1)/(fx2-fx1))*fx2)
+	nultocka.value = xn.getValue()
+	fn = Sheet.getCellByPosition(21, i)
+	fn.value=f.getValue()
+next i
+
+End Sub
+</script:module>

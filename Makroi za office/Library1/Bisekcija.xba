@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Bisekcija" script:language="StarBasic">Sub bisekcija1
+
+Dim Doc As Object
+Dim Sheet As Object
+Dim vrijednost, preciznost, x, xn, an, bn, an0, bn0, x0, n As Object
+Dim funkcija, funckija0, vrijednost_funkcije, B1 As Object   
+Dim i
+Dim iteracije
+Dim ai, bi, xi, ga, gb As Double
+Dim oRange As Object
+Dim oFlags As Long
+
+Doc = ThisComponent
+Sheet = Doc.Sheets(0)
+
+oRange = Sheet.getCellRangeByName(&quot;J5:N31000&quot;)
+
+oFlags = com.sun.star.sheet.CellFlags.VALUE + _
+    com.sun.star.sheet.CellFlags.DATETIME + _
+    com.sun.star.sheet.CellFlags.STRING + _
+    com.sun.star.sheet.CellFlags.ANNOTATION + _
+    com.sun.star.sheet.CellFlags.FORMULA + _
+    com.sun.star.sheet.CellFlags.HARDATTR + _
+    com.sun.star.sheet.CellFlags.STYLES + _
+    com.sun.star.sheet.CellFlags.OBJECTS + _
+    com.sun.star.sheet.CellFlags.EDITATTR
+    
+oRange.clearContents(oFlags)
+
+preciznost = Sheet.getCellByPosition(16, 0)
+an = Sheet.getCellByPosition(10, 0)
+bn = Sheet.getCellByPosition(10, 1)
+an0 = Sheet.getCellByPosition(10, 4)
+bn0 = Sheet.getCellByPosition(11, 4)
+x0 = Sheet.getCellByPosition(12, 4)
+x= Sheet.getCellByPosition(13, 1)
+funkcija = Sheet.getCellByPosition(13, 4)
+funkcija0 = Sheet.getCellByPosition(13, 0)
+x.value=an.getValue()
+ga=funkcija0.getValue()
+x.value=bn.getValue()
+gb=funkcija0.getValue()
+
+if (ga*gb &gt; 0) then
+	msgbox(&quot;Pocetni interval krivo zadan. Vrijednosti funkcije u točkama intervala moraju biti različite.&quot;)
+	exit sub
+end if
+n = Sheet.getCellByPosition(9, 4)
+
+n.value = 0
+an0.value=an.getValue()
+bn0.value=bn.getValue()
+x0.value=(an0.value+bn0.value)/2
+x.value=x0.value
+funkcija.value=funkcija0.getValue()
+
+i = 5
+iteracije=0
+Do While Abs(funkcija.value) &gt; preciznost.getValue()
+	an0 = Sheet.getCellByPosition(10, i-1)
+	x.value=an0.getValue()
+	ai=funkcija0.getValue()
+	bn0 = Sheet.getCellByPosition(11, i-1)
+	x.value=bn0.getValue()
+	bi=funkcija0.getValue()
+	x0 = Sheet.getCellByPosition(12, i-1)
+	x.value=x0.getValue()
+	xi=funkcija0.getValue()
+	if (ai*xi &lt; 0) then 
+		ai = an0.getValue()
+		xi = x0.getValue()
+		an0 = Sheet.getCellByPosition(10, i)
+		an0.value=ai
+		bn0 = Sheet.getCellByPosition(11, i)
+		bn0.value=xi
+	end if
+	x.value=x0.getValue()
+	xi=funkcija0.getValue()
+	if  (bi*xi &lt; 0) then
+		xi = x0.getValue()
+		bi = bn0.getValue()
+		an0 = Sheet.getCellByPosition(10, i)
+		an0.value=xi
+		bn0 = Sheet.getCellByPosition(11, i)
+		bn0.value=bi
+	end if
+	x0 = Sheet.getCellByPosition(12, i)
+	x0.value=(an0.value+bn0.value)/2
+	x.value=x0.getValue()
+	funkcija = Sheet.getCellByPosition(13, i)
+	funkcija.value=funkcija0.getValue()
+	n = Sheet.getCellByPosition(9, i)
+	n.value=iteracije+1
+	iteracije=iteracije+1
+	i=i+1
+Loop
+
+End Sub
+
+rem -------------------------------------------------------------
+
+Sub bisekcija2
+
+Dim Doc As Object
+Dim Sheet As Object
+Dim broj_iteracija, vrijednost, x, xn, an, bn, an0, bn0, x0, n As Object
+Dim funkcija, funckija0, vrijednost_funkcije, B1 As Object   
+Dim i
+Dim iteracije
+Dim ai, bi, xi As Double
+Dim oRange As Object
+Dim oFlags As Long
+
+Doc = ThisComponent
+Sheet = Doc.Sheets(0)
+
+oRange = Sheet.getCellRangeByName(&quot;J5:N31000&quot;)
+
+oFlags = com.sun.star.sheet.CellFlags.VALUE + _
+    com.sun.star.sheet.CellFlags.DATETIME + _
+    com.sun.star.sheet.CellFlags.STRING + _
+    com.sun.star.sheet.CellFlags.ANNOTATION + _
+    com.sun.star.sheet.CellFlags.FORMULA + _
+    com.sun.star.sheet.CellFlags.HARDATTR + _
+    com.sun.star.sheet.CellFlags.STYLES + _
+    com.sun.star.sheet.CellFlags.OBJECTS + _
+    com.sun.star.sheet.CellFlags.EDITATTR
+    
+oRange.clearContents(oFlags)
+
+broj_iteracija = Sheet.getCellByPosition(16, 1)
+an = Sheet.getCellByPosition(10, 0)
+bn = Sheet.getCellByPosition(10, 1)
+an0 = Sheet.getCellByPosition(10, 4)
+bn0 = Sheet.getCellByPosition(11, 4)
+x0 = Sheet.getCellByPosition(12, 4)
+x= Sheet.getCellByPosition(13, 1)
+funkcija = Sheet.getCellByPosition(13, 4)
+funkcija0 = Sheet.getCellByPosition(13, 0)
+x.value=an.getValue()
+ga=funkcija0.getValue()
+x.value=bn.getValue()
+gb=funkcija0.getValue()
+
+if (ga*gb &gt; 0) then
+	msgbox(&quot;Pocetni interval krivo zadan. Vrijednosti funkcije u točkama intervala moraju biti različite.&quot;)
+	exit sub
+end if
+n = Sheet.getCellByPosition(9, 4)
+
+n.value = 0
+an0.value=an.getValue()
+bn0.value=bn.getValue()
+x0.value=(an0.value+bn0.value)/2
+x.value=x0.value
+funkcija.value=funkcija0.getValue()
+
+iteracije=0
+for i = 5 to broj_iteracija.getValue()+4
+	an0 = Sheet.getCellByPosition(10, i-1)
+	x.value=an0.getValue()
+	ai=funkcija0.getValue()
+	bn0 = Sheet.getCellByPosition(11, i-1)
+	x.value=bn0.getValue()
+	bi=funkcija0.getValue()
+	x0 = Sheet.getCellByPosition(12, i-1)
+	x.value=x0.getValue()
+	xi=funkcija0.getValue()
+	if (ai*xi &lt; 0) then 
+		ai = an0.getValue()
+		xi = x0.getValue()
+		an0 = Sheet.getCellByPosition(10, i)
+		an0.value=ai
+		bn0 = Sheet.getCellByPosition(11, i)
+		bn0.value=xi
+	end if
+	x.value=x0.getValue()
+	xi=funkcija0.getValue()
+	if  (bi*xi &lt; 0) then
+		xi = x0.getValue()
+		bi = bn0.getValue()
+		an0 = Sheet.getCellByPosition(10, i)
+		an0.value=xi
+		bn0 = Sheet.getCellByPosition(11, i)
+		bn0.value=bi
+	end if
+	x0 = Sheet.getCellByPosition(12, i)
+	x0.value=(an0.value+bn0.value)/2
+	x.value=x0.getValue()
+	funkcija = Sheet.getCellByPosition(13, i)
+	funkcija.value=funkcija0.getValue()
+	n = Sheet.getCellByPosition(9, i)
+	n.value=iteracije+1
+	iteracije=iteracije+1
+next i
+
+End Sub
+</script:module>
